@@ -1,0 +1,29 @@
+import numpy as np
+import pandas as pd 
+df=pd.read_csv(r"E:\Machine learning\house-prices-advanced-regression-techniques\train.csv")
+print(df["SalePrice"].describe())
+missing=df.isnull().sum()
+print(missing[missing>0].sort_values(ascending=False))
+print(df[["SalePrice","OverallQual","GrLivArea"]].corr())
+corr=df.corr(numeric_only=True)
+print(corr["SalePrice"] .sort_values(ascending=False).head(10))
+print(df[["GarageCars","GarageArea"]].corr())
+df.drop(["PoolQC","MiscFeature","Alley","Fence"],axis=1,inplace=True)
+df["FireplaceQu"]=df["FireplaceQu"].fillna("No FirePLace")
+garage_cols=["GarageType","GarageFinish","GarageQual","GarageCond"]
+for col in garage_cols:
+    df[col]=df[col].fillna("No Garage")
+df["GarageYrBlt"]=df["GarageYrBlt"].fillna(0)
+bsmt_cols=["BsmtExposure","BsmtFinType2","BsmtQual","BsmtCond","BsmtFinType1"]
+for col in bsmt_cols:
+    df[col]=df[col].fillna("No Basment")
+print(df["MasVnrType"].value_counts())
+print(df["LotFrontage"].describe())
+df["MasVnrArea"]=df["MasVnrArea"].fillna(df["MasVnrArea"].median())
+df["Electrical"]=df["Electrical"].fillna(df["Electrical"].mode()[0])
+df["MasVnrType"]=df["MasVnrType"].fillna("None")
+df["LotFrontage"]=df["LotFrontage"].fillna(df["LotFrontage"].mean())
+missing=df.isnull().sum()
+print(missing[missing>0].sort_values(ascending=False))
+df=pd.get_dummies(df,drop_first=True)
+print(df.shape)
